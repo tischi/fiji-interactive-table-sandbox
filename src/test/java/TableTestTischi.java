@@ -1,7 +1,13 @@
 import de.embl.cba.metadata.table.InteractiveGenericTable;
+import de.embl.cba.metadata.table.InteractiveTableClickEventListener;
+import de.embl.cba.metadata.table.InteractiveTableDisplay;
 import de.embl.cba.metadata.table.InteractiveTablePanel;
+import ij.IJ;
 import net.imagej.ImageJ;
-import net.imagej.table.DefaultGenericTable;
+import org.scijava.table.DefaultGenericTable;
+import org.scijava.table.DefaultTableDisplay;
+import org.scijava.table.Table;
+import org.scijava.ui.DefaultUIService;
 
 public class TableTestTischi
 {
@@ -17,11 +23,18 @@ public class TableTestTischi
 		// show non-interactive
 		ImageJ imagej = new ImageJ();
 		imagej.ui().showUI();
-		imagej.ui().show( defaultGenericTable );
+
+		InteractiveTableDisplay tableDisplay = (InteractiveTableDisplay) imagej.display().createDisplay(defaultGenericTable);
+		tableDisplay.addClickEventListener(new InteractiveTableClickEventListener() {
+			@Override
+			public void execute(Table t, int row, int column) {
+				IJ.log("CLICK! table " + t + " row" + row + " column " + column);
+			}
+		});
 
 		// show interactive
-		final InteractiveTablePanel interactiveTablePanel = new InteractiveTablePanel( defaultGenericTable );
-		interactiveTablePanel.showTable();
+		//final InteractiveTablePanel interactiveTablePanel = new InteractiveTablePanel( defaultGenericTable );
+		//interactiveTablePanel.showTable();
 
 	}
 }
